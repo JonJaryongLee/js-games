@@ -63,6 +63,8 @@ const cardArray = [
 ];
 // 파싱한 DOM 정보
 const gameDOM = [];
+// 클릭 횟수
+let clickCount = 0;
 
 // function
 
@@ -111,6 +113,9 @@ const createBoard = () => {
   }
 };
 
+// 일치하는지 판별
+const isCorrect = () => {};
+
 // 클릭하면 뒤집기
 const flip = (location) => {
   const id = cardArray[location].id;
@@ -119,6 +124,11 @@ const flip = (location) => {
   // 이미지 교체
   gameDOM[parsedId[0]][parsedId[1]].querySelector("img").src =
     cardArray[location].img;
+  clickCount++;
+  if (clickCount === 2) {
+    clickCount = 0;
+    isCorrect();
+  }
 };
 
 // 맨 처음 자동으로 실행됨
