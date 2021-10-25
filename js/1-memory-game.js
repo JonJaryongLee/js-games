@@ -4,67 +4,82 @@ const cardArray = [
     name: "cat",
     img: "../public/1-memory-game/cat.png",
     id: null,
+    done: false,
   },
   {
     name: "cat",
     img: "../public/1-memory-game/cat.png",
     id: null,
+    done: false,
   },
   {
     name: "dog",
     img: "../public/1-memory-game/dog.png",
     id: null,
+    done: false,
   },
   {
     name: "dog",
     img: "../public/1-memory-game/dog.png",
     id: null,
+    done: false,
   },
   {
     name: "elephant",
     img: "../public/1-memory-game/elephant.png",
     id: null,
+    done: false,
   },
   {
     name: "elephant",
     img: "../public/1-memory-game/elephant.png",
     id: null,
+    done: false,
   },
   {
     name: "hedgehog",
     img: "../public/1-memory-game/hedgehog.png",
     id: null,
+    done: false,
   },
   {
     name: "hedgehog",
     img: "../public/1-memory-game/hedgehog.png",
     id: null,
+    done: false,
   },
   {
     name: "pig",
     img: "../public/1-memory-game/pig.png",
     id: null,
+    done: false,
   },
   {
     name: "pig",
     img: "../public/1-memory-game/pig.png",
     id: null,
+    done: false,
   },
   {
     name: "squirrel",
     img: "../public/1-memory-game/squirrel.png",
     id: null,
+    done: false,
   },
   {
     name: "squirrel",
     img: "../public/1-memory-game/squirrel.png",
     id: null,
+    done: false,
   },
 ];
 // 파싱한 DOM 정보
 const gameDOM = [];
 // 클릭 횟수
 let clickCount = 0;
+// 첫번째, 두번째 클릭 인덱스
+let clickFirst = -1;
+let clickSecond = -1;
 
 // function
 
@@ -103,31 +118,73 @@ const createBoard = () => {
       // img 태그를 만들어서 card 안에 담는다.
       const card = document.createElement("img");
       // card(img태그) 에 속성(attribute) 추가함
-      // 첫번째로, 물음표 이미지의 경로
+      // 물음표 이미지의 경로
       card.setAttribute("src", "../public/1-memory-game/Question-Mark.png");
-      // 두번째로, data-id 라는 속성이 있는데 이것은 행과 열로 이루어진 칸의 주소라고 생각하자
-      card.setAttribute("data-id", `${i}-${j}`);
       // 이렇게 만들어진 card(img태그) 를 각각의 칸에 집어넣는다.
       gameDOM[i][j].appendChild(card);
     }
   }
 };
 
+// 첫번째 클릭인지 두번째 클릭인지 판단해 클릭 데이터 저장
+const setClickHistory = (location) => {
+  if (clickFirst === -1) {
+    clickFirst = location;
+  } else {
+    clickSecond = location;
+  }
+};
+
+// 틀렸을 때 다시 뒤집음
+const backFlip = () => {
+  // 파싱
+  const parsedIdFirst = cardArray[clickFirst].id.split("-");
+  const parsedIdSecond = cardArray[clickSecond].id.split("-");
+
+  // 0.5초 딜레이. 이게 없으면 두번째 이미지를 아예 확인 못함
+  setTimeout(() => {
+    gameDOM[parsedIdFirst[0]][parsedIdFirst[1]].querySelector("img").src =
+      "../public/1-memory-game/Question-Mark.png";
+    gameDOM[parsedIdSecond[0]][parsedIdSecond[1]].querySelector("img").src =
+      "../public/1-memory-game/Question-Mark.png";
+  }, 500);
+};
+
 // 일치하는지 판별
-const isCorrect = () => {};
+const isCorrect = () => {
+  // 만약 클릭했던 두 개의 그림이 일치하면 done 을 true 로 바꿔서 flip 이 작동 안되게 처리
+  if (cardArray[clickFirst].name === cardArray[clickSecond].name) {
+    cardArray[clickFirst].done = true;
+    cardArray[clickSecond].done = true;
+  } else {
+    // 다시 뒤집음
+    backFlip();
+  }
+};
 
 // 클릭하면 뒤집기
 const flip = (location) => {
-  const id = cardArray[location].id;
-  // 만약 1-2 로 되어있으면, [1, 2] 로 분리됨
-  const parsedId = id.split("-");
-  // 이미지 교체
-  gameDOM[parsedId[0]][parsedId[1]].querySelector("img").src =
-    cardArray[location].img;
-  clickCount++;
-  if (clickCount === 2) {
-    clickCount = 0;
-    isCorrect();
+  // 아직 맞추지 않았을때만 실행됨
+  if (!cardArray[location].done) {
+    // 첫번째 클릭인지 두번째 클릭인지 판단해 클릭 데이터 저장
+    setClickHistory(location);
+    // 만약 1-2 로 되어있으면, [1, 2] 로 분리됨
+    const parsedId = cardArray[location].id.split("-");
+    // 이미지 교체
+    gameDOM[parsedId[0]][parsedId[1]].querySelector("img").src =
+      cardArray[location].img;
+    clickCount++;
+    if (clickCount === 2) {
+      // 초기화
+      clickCount = 0;
+      // 맞는지 아닌지 판단
+      isCorrect();
+    }
+    // clickFirst와 clickSecond 를 둘 다 -1 로 초기화.
+    if (clickFirst !== -1 && clickSecond !== -1) {
+      clickFirst = -1;
+      clickSecond = -1;
+    }
   }
 };
 
