@@ -2,73 +2,73 @@
 const cardArray = [
   {
     name: "cat",
-    img: "../public/1-memory-game/cat.png",
+    img: "./public/cat.png",
     id: null,
     done: false,
   },
   {
     name: "cat",
-    img: "../public/1-memory-game/cat.png",
+    img: "./public/cat.png",
     id: null,
     done: false,
   },
   {
     name: "dog",
-    img: "../public/1-memory-game/dog.png",
+    img: "./public/dog.png",
     id: null,
     done: false,
   },
   {
     name: "dog",
-    img: "../public/1-memory-game/dog.png",
+    img: "./public/dog.png",
     id: null,
     done: false,
   },
   {
     name: "elephant",
-    img: "../public/1-memory-game/elephant.png",
+    img: "./public/elephant.png",
     id: null,
     done: false,
   },
   {
     name: "elephant",
-    img: "../public/1-memory-game/elephant.png",
+    img: "./public/elephant.png",
     id: null,
     done: false,
   },
   {
     name: "hedgehog",
-    img: "../public/1-memory-game/hedgehog.png",
+    img: "./public/hedgehog.png",
     id: null,
     done: false,
   },
   {
     name: "hedgehog",
-    img: "../public/1-memory-game/hedgehog.png",
+    img: "./public/hedgehog.png",
     id: null,
     done: false,
   },
   {
     name: "pig",
-    img: "../public/1-memory-game/pig.png",
+    img: "./public/pig.png",
     id: null,
     done: false,
   },
   {
     name: "pig",
-    img: "../public/1-memory-game/pig.png",
+    img: "./public/pig.png",
     id: null,
     done: false,
   },
   {
     name: "squirrel",
-    img: "../public/1-memory-game/squirrel.png",
+    img: "./public/squirrel.png",
     id: null,
     done: false,
   },
   {
     name: "squirrel",
-    img: "../public/1-memory-game/squirrel.png",
+    img: "./public/squirrel.png",
     id: null,
     done: false,
   },
@@ -119,7 +119,8 @@ const createBoard = () => {
       const card = document.createElement("img");
       // card(img태그) 에 속성(attribute) 추가함
       // 물음표 이미지의 경로
-      card.setAttribute("src", "../public/1-memory-game/Question-Mark.png");
+      card.setAttribute("src", "./public/Question-Mark.png");
+      card.classList.add("eachImage");
       // 이렇게 만들어진 card(img태그) 를 각각의 칸에 집어넣는다.
       gameDOM[i][j].appendChild(card);
     }
@@ -144,9 +145,9 @@ const backFlip = () => {
   // 0.5초 딜레이. 이게 없으면 두번째 이미지를 아예 확인 못함
   setTimeout(() => {
     gameDOM[parsedIdFirst[0]][parsedIdFirst[1]].querySelector("img").src =
-      "../public/1-memory-game/Question-Mark.png";
+      "./public/Question-Mark.png";
     gameDOM[parsedIdSecond[0]][parsedIdSecond[1]].querySelector("img").src =
-      "../public/1-memory-game/Question-Mark.png";
+      "./public/Question-Mark.png";
   }, 500);
 };
 
